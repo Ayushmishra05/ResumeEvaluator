@@ -1,0 +1,13 @@
+boto3==1.35.76
+boto3==1.35.63
+boto3==1.38.6
+Flask==2.2.5
+flask_wtf==1.2.2
+python-dotenv==1.1.0
+Requests==2.32.3
+Werkzeug==2.2.3
+WTForms==3.2.1
+langchain
+langchain_community
+langchain_core 
+langchain_groq
