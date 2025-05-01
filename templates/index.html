@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Upload</title>
+</head>
+<body>
+
+    <form action="/" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ form.file() }}
+        {{ form.submit() }}
+    </form>
+
+    {% if message %}
+        <div style="margin-top: 10px; color: green;">
+            {{ message }}
+        </div>
+    {% endif %}
+
+</body>
+</html>
