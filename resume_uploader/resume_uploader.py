@@ -57,6 +57,7 @@ def index():
             if response.status_code == 200:
                 print("File was Sent") 
             else:
+                print(response.status_code)
                 print("File wasn't sent" )
         except Exception as e:
             print("Couldn't Upload into S3 , error " , e)
