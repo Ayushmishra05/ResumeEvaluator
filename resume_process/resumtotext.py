@@ -1,8 +1,8 @@
 from PyPDF2 import PdfReader 
 import urllib.request 
-from ats import GetKeywords
-from insights_generation import InsightsGeneration 
-from overall_analyser import OverallAnalyser 
+from resume_process.ats import GetKeywords
+from resume_process.insights_generation import InsightsGeneration 
+from resume_process.overall_analyser import OverallAnalyser 
 import ast
 
 class ResumeToText():
@@ -25,7 +25,7 @@ class ResumeToText():
                 if text:
                     fp.write(text + "\n")
     def get_text(self):
-        with open("temp.txt" , "r") as fp:
+        with open("temp.txt" , "r" , encoding="utf-8") as fp:
             result = fp.read() 
         return result 
     

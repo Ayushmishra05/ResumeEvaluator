@@ -1,7 +1,7 @@
 from flask import Flask , request, jsonify
 import requests 
-from resumtotext import ResumeToText
-from mongo_upload import upload_in_mongo
+from resume_process.resumtotext import ResumeToText
+from resume_process.mongo_upload import upload_in_mongo
 app = Flask(__name__) 
 
 @app.route("/" , methods = ['POST'])
