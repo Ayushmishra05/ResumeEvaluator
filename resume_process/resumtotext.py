@@ -6,26 +6,23 @@ from resume_process.overall_analyser import OverallAnalyser
 import ast
 
 class ResumeToText():
-    def __init__(self , url , descr):
+    def __init__(self  , job , descr):
         self.path = "temp.pdf"
-        self.url = url 
         self.descr = descr
+        self.text = "temp.txt"
+        self.job = job
         
-
-    def download_pdf(self):
-        urllib.request.urlretrieve(self.url, self.path)
-
     
     def convert_to_text(self):
-        self.download_pdf()
         reader = PdfReader(self.path) 
-        with open("temp.txt" , "w" , encoding = "utf-8") as fp:
+        with open(self.text , "w" , encoding = "utf-8") as fp:
             for page in reader.pages:
                 text = page.extract_text() 
                 if text:
                     fp.write(text + "\n")
+
     def get_text(self):
-        with open("temp.txt" , "r" , encoding="utf-8") as fp:
+        with open(self.text , "r" , encoding="utf-8") as fp:
             result = fp.read() 
         return result 
     
@@ -36,18 +33,18 @@ class ResumeToText():
     
     def get_ins(self, text ):
         insights_gen = InsightsGeneration() 
-        insights = insights_gen.get_insights(text) 
-        return insights 
+        insights, html = insights_gen.get_insights(text , self.descr , self.job) 
+        return insights , html 
     
     def analyse_overall(self):
         self.convert_to_text()
         text = self.get_text()
         oa = OverallAnalyser()
         kw = self.get_ats(text)
-        ins = self.get_ins(text) 
-        analysis = oa.analyse(text, self.descr, kw, ins)  
+        ins , html = self.get_ins(text) 
+        analysis = oa.analyse(text, self.descr, kw, ins , self.job)  
 
-        return ast.literal_eval(analysis) 
+        return ast.literal_eval(analysis) , html
       
           
         

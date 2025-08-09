@@ -7,6 +7,8 @@ from flask_wtf import FlaskForm
 from dotenv import load_dotenv 
 from werkzeug.utils import secure_filename
 from flask_wtf.file import FileAllowed
+from wtforms import FileField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email
 import os 
 import uuid 
 import boto3 
@@ -31,7 +33,13 @@ URL = os.getenv("backend_url" , "http://localhost:8000")
 
 class UploadFile(FlaskForm):
     file = FileField("Upload file" , validators = [FileAllowed(['pdf'])]) 
+    email = StringField("Email", validators=[DataRequired(), Email()]) 
+    job_role = StringField("Job Role" , validators=[DataRequired()])
+    job_description = StringField("Job Description")
+    company = StringField("Company" , validators=[DataRequired()])
+    name = StringField("name" , validators=[DataRequired()])
     submit = SubmitField("Submit file")
+
 
 
 @app.route("/" , methods = ['GET' , 'POST']) 
@@ -42,16 +50,26 @@ def index():
     if form.validate_on_submit():
         uploaded_file = form.file.data 
         file_name = secure_filename(uploaded_file.filename) 
-        secured_name = f"{uuid.uuid4().hex}_{file_name}"
+        secured_name = f"{uuid.uuid4().hex}_{file_name}" 
+        job_role = form.job_role.data 
+        job_descr = form.job_description.data 
+        email = form.email.data
+        company = form.company.data
+        name = form.name.data
         try:
-            resume_file = io.BytesIO(uploaded_file.read())
-            s3_client.upload_fileobj(resume_file , Key = secured_name , Bucket = bucket_name) 
-            print("File Uploaded in S3")
+
+            # resume_file = io.BytesIO(uploaded_file.read()) 
+            # print("resume file " , resume_file.)
+            # s3_client.upload_fileobj(resume_file , Key = secured_name , Bucket = bucket_name)  
+            uploaded_file.save(r'temp.pdf')
+            # print("File Uploaded in S3")
             message = "Your File Was Uploaded Successfully"
-            fileid = f"https://resumesbyevaluator.s3.us-east-1.amazonaws.com/{secured_name}"
             data = {
-                "url" : fileid , 
-                "description" : "The Job is for Software Developer, capable of having Devops skills, Development skills is manageable, skills including Kubernetes, docker and other devops skills"
+                "name" : name, 
+                "company" : company, 
+                "role" : job_role, 
+                "description" : job_descr, 
+                "email" : email
             }
             response = requests.post(url = URL  , json=data)
             if response.status_code == 200:

@@ -13,15 +13,15 @@ class InsightsGeneration():
         insight_config = load_config(INSIGHT)
         self.template = ChatPromptTemplate([
             ("system" , insight_config['insight']), 
-            ("human" , "Resume ==> {resume_text}") 
+            ("human" , "Resume ==> {resume_text} , job_role ==> {job} , job_description ==> {descr}") 
         ])
 
-        self.parser = StrOutputParser()
-    def get_insights(self, text):
+        self.parser = JsonOutputParser()
+    def get_insights(self, text , descr , job):
         chain = self.template | self.model | self.parser
-        output = chain.invoke({"resume_text" : text})
+        output = chain.invoke({"resume_text" : text , "descr" : descr, "job" : job})
         print("Insight " , output)
-        return output 
+        return output['plain_text'] , output['html'] 
 
 # if __name__ == "__main__":
 #     ig = InsightsGeneration()

@@ -8,8 +8,39 @@
 
     <form action="/" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        {{ form.file() }}
-        {{ form.submit() }}
+
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(size=40) }}
+        </div>
+
+        <div>
+            {{ form.name.label }}<br>
+            {{ form.name(size=40) }}
+        </div>
+
+        <div>
+            {{ form.company.label }}<br>
+            {{ form.company(size=40) }}
+        </div>
+        <div>
+            {{ form.job_role.label }}<br>
+            {{ form.job_role(size=40) }}
+        </div>
+
+        <div>
+            {{ form.job_description.label }}<br>
+            {{ form.job_description(size=40) }}
+        </div>
+        
+        <div>
+            {{ form.file.label }}<br>
+            {{ form.file() }}
+        </div>
+        
+        <div>
+            {{ form.submit() }}
+        </div>
     </form>
 
     {% if message %}

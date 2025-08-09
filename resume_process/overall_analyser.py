@@ -11,17 +11,17 @@ class OverallAnalyser():
         overall_config = load_config(OVERALL)
         self.template = ChatPromptTemplate([
             ("system" , overall_config['overall']), 
-            ("human" , "Job Description ==> {job_description} , ATS_Keywords ==> {ats} , HR Insights ==> {hr} , Resume ==> {resume}") 
+            ("human" , "Job Description ==> {job_description} , ATS_Keywords ==> {ats} , HR Insights ==> {hr} , Resume ==> {resume} , Job Role ==> {job}") 
         ])
 
         self.parser = StrOutputParser() 
-    def analyse(self, text, descr, ats, hr):
+    def analyse(self, text, descr, ats, hr , job):
         chain = self.template | self.model | self.parser
-        output = chain.invoke({"resume" : text , "job_description" : descr, "ats" : ats, "hr" : hr })
+        output = chain.invoke({"resume" : text , "job_description" : descr, "ats" : ats, "hr" : hr , "job" : job})
         print(type(output) , output)
-        selected = json.loads(output)['Selected']
+        score = json.loads(output)['Score']
         selected = {
-            'Selected' : selected
+            'Score' : score
         }
         with open(selected_path , 'w') as f:
             json.dump(selected , fp=f)
